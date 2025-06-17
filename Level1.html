@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Level 1 - Der Eingang zum Labyrinth</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      background-image: none !important;
+      background-attachment: initial !important;
+      background-repeat: no-repeat !important;
+    }
+    
+    body {
+      font-family: 'Crimson Text', serif;
+      background: linear-gradient(135deg, #0f1419 0%, #1a2332 25%, #2d1810 50%, #1a2332 75%, #0f1419 100%) !important;
+      background-image: linear-gradient(135deg, #0f1419 0%, #1a2332 25%, #2d1810 50%, #1a2332 75%, #0f1419 100%) !important;
+      min-height: 100vh;
+      color: #d4af37;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 69, 19, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 70%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .level-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px 0;
+    }
+    
+    .level-title {
+      font-family: 'Cinzel', serif;
+      font-size: 2.5em;
+      font-weight: 700;
+      color: #d4af37;
+      text-shadow: 
+        0 0 15px #d4af37,
+        0 0 30px #d4af37,
+        0 0 45px rgba(212, 175, 55, 0.5);
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+    
+    .level-subtitle {
+      font-size: 1.3em;
+      color: #ffd700;
+      font-style: italic;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    }
+    
+    .image-section {
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .mystical-frame {
+      position: relative;
+      display: inline-block;
+      padding: 20px;
+      background: linear-gradient(145deg, #8b4513 0%, #daa520 50%, #8b4513 100%);
+      border-radius: 25px;
+      box-shadow: 
+        0 0 30px rgba(212, 175, 55, 0.6),
+        inset 0 0 20px rgba(0, 0, 0, 0.3);
+      border: 4px solid #ffd700;
+    }
+    
+    .mystical-frame::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      right: -8px;
+      bottom: -8px;
+      background: linear-gradient(145deg, #d4af37, #ffd700, #8b4513, #d4af37);
+      border-radius: 30px;
+      z-index: -1;
+    }
+    
+    .mystical-frame::after {
+      content: '⚡ ✨ ⚡';
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(145deg, #8b4513 0%, #daa520 100%);
+      color: #ffd700;
+      padding: 5px 15px;
+      border-radius: 15px;
+      font-size: 1.2em;
+      border: 2px solid #ffd700;
+      text-shadow: 0 0 10px #ffd700;
+    }
+    
+    .level-image {
+      width: 100%;
+      max-width: 500px;
+      height: 350px;
+      object-fit: cover;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 215, 0, 0.3);
+    }
+    
+    .content-section {
+      background: linear-gradient(145deg, rgba(44, 24, 16, 0.95) 0%, rgba(61, 40, 23, 0.95) 50%, rgba(44, 24, 16, 0.95) 100%);
+      border: 3px solid #d4af37;
+      border-radius: 25px;
+      padding: 40px;
+      margin-bottom: 30px;
+      box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.8),
+        inset 0 0 30px rgba(212, 175, 55, 0.1);
+      position: relative;
+      backdrop-filter: blur(10px);
+    }
+    
+    .content-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 98px,
+          rgba(139, 69, 19, 0.1) 100px
+        );
+      pointer-events: none;
+      border-radius: 22px;
+    }
+    
+    .story-section {
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .story-title {
+      font-family: 'Cinzel', serif;
+      color: #ffd700;
+      font-size: 1.4em;
+      margin-bottom: 15px;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+    
+    .story-title::before,
+    .story-title::after {
+      content: '⚜';
+      margin: 0 10px;
+      color: #d4af37;
+    }
+    
+    .story-text {
+      font-size: 1.1em;
+      line-height: 1.6;
+      text-align: center;
+      color: #f5e6a3;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .quest-section {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .quest-title {
+      font-family: 'Cinzel', serif;
+      color: #ffd700;
+      font-size: 1.3em;
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+    
+    .quest-title::before,
+    .quest-title::after {
+      content: '⚔';
+      margin: 0 10px;
+      color: #d4af37;
+    }
+    
+    .math-problem {
+      background: rgba(0, 0, 0, 0.7);
+      border: 3px solid #8b4513;
+      border-radius: 20px;
+      padding: 25px;
+      margin: 20px 0;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+    
+    .math-problem::before {
+      content: '🌟';
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(145deg, #8b4513 0%, #daa520 100%);
+      border: 2px solid #ffd700;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
+      animation: sparkle 2s infinite;
+    }
+    
+    @keyframes sparkle {
+      0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+      50% { opacity: 0.7; transform: translateX(-50%) scale(1.2); }
+    }
+    
+    .problem-text {
+      font-family: 'Cinzel', serif;
+      font-size: 2em;
+      color: #ffd700;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+      margin-bottom: 25px;
+      margin-top: 10px;
+    }
+    
+    .answer-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .answer-input {
+      padding: 15px 25px;
+      font-size: 1.5em;
+      border: 3px solid #8b4513;
+      border-radius: 12px;
+      background: rgba(244, 230, 180, 0.95);
+      color: #2c1810;
+      font-family: 'Crimson Text', serif;
+      text-align: center;
+      width: 200px;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+    
+    .answer-input:focus {
+      outline: none;
+      border-color: #d4af37;
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+      background: rgba(255, 255, 255, 0.98);
+      transform: scale(1.05);
+    }
+    
+    .submit-btn {
+      background: linear-gradient(45deg, #8b0000 0%, #dc143c 50%, #8b0000 100%);
+      color: #fff;
+      border: 3px solid #d4af37;
+      padding: 18px 35px;
+      border-radius: 18px;
+      font-size: 1.3em;
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(220, 20, 60, 0.4);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(220, 20, 60, 0.6);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    }
+    
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 30px;
+      padding: 0 20px;
+    }
+    
+    .nav-btn {
+      background: linear-gradient(45deg, #4b0082 0%, #9400d3 50%, #4b0082 100%);
+      color: #fff;
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 15px;
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 2px solid #d4af37;
+      box-shadow: 0 5px 15px rgba(148, 0, 211, 0.3);
+    }
+    
+    .nav-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(148, 0, 211, 0.5);
+    }
+    
+    .message {
+      margin-top: 25px;
+      padding: 20px 30px;
+      border-radius: 15px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.1em;
+      display: none;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .success {
+      background: linear-gradient(145deg, #228b22 0%, #32cd32 100%);
+      border: 2px solid #90ee90;
+      color: #fff;
+      box-shadow: 0 5px 15px rgba(34, 139, 34, 0.4);
+    }
+    
+    .error {
+      background: linear-gradient(145deg, #8b0000 0%, #dc143c 100%);
+      border: 2px solid #ff6b6b;
+      color: #fff;
+      box-shadow: 0 5px 15px rgba(220, 20, 60, 0.4);
+    }
+    
+    .wk-logo {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 60px;
+      height: 60px;
+      z-index: 1000;
+      opacity: 1;
+      transition: all 0.3s ease;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 255, 255, 0.4);
+      background: rgba(20, 25, 35, 0.9);
+      padding: 5px;
+      backdrop-filter: blur(5px);
+    }
+    
+    .wk-logo:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 25px rgba(0, 255, 255, 0.6);
+    }
+    
+    .wk-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .level-title {
+        font-size: 2em;
+      }
+      
+      .quest-container {
+        padding: 25px;
+      }
+      
+      .problem-text {
+        font-size: 1.5em;
+      }
+      
+      .answer-input {
+        width: 150px;
+        font-size: 1.3em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="level-header">
+      <h1 class="level-title">⚡ LEVEL I ⚡</h1>
+      <p class="level-subtitle">Das Bronzetor der Akademie</p>
+    </div>
+    
+    <div class="image-section">
+      <div class="mystical-frame">
+        <img src="Level1.png" alt="Das Bronzetor" class="level-image" id="levelImage">
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <div class="story-section">
+        <h3 class="story-title">Die Geschichte beginnt</h3>
+        <div class="story-text">
+          Ihr steht am schweren Bronzetor der Akademie von Arithma. Ein steinerner Wächter erwacht zum Leben und spricht: 
+          <br><br>
+          <strong>"Nur wer beweist, dass er die Bruchrechnung versteht, darf eintreten. Löse die erste Aufgabe!"</strong>
+          <br><br>
+          Der steinerne Wächter zeigt auf eine magische Inschrift, die am Tor erscheint...
+        </div>
+      </div>
+      
+      <div class="quest-section">
+        <h3 class="quest-title">Deine magische Aufgabe</h3>
+        <div class="math-problem">
+          <div class="problem-text">
+            2/5 + 1/2 = ?
+          </div>
+          
+          <div class="answer-section">
+            <input type="text" class="answer-input" id="answer" placeholder="Deine Antwort..." maxlength="10">
+            <button class="submit-btn" onclick="checkAnswer()">🔮 Zauberspruch wirken</button>
+          </div>
+        </div>
+        
+        <div class="message" id="message"></div>
+      </div>
+    </div>
+    
+    <div class="navigation">
+      <a href="index.html" class="nav-btn">🏠 Zurück zum Start</a>
+      <a href="Level2.html" class="nav-btn" id="nextBtn" style="display: none;">🪞 Nächstes Level</a>
+    </div>
+  </div>
+
+  <!-- WK Logo -->
+  <div class="wk-logo">
+    <img src="wk.png" alt="WK Logo" onerror="this.style.display='none';">
+  </div>
+
+  <script>
+    // Korrekte Antwort (als Bruch gekürzt)
+    const correctAnswer = "9/10";
+    const alternativeAnswers = ["18/20"]; // Alternative korrekte Schreibweisen
+    
+    function checkAnswer() {
+      const userAnswer = document.getElementById('answer').value.trim();
+      const messageEl = document.getElementById('message');
+      const nextBtn = document.getElementById('nextBtn');
+      
+      // Normalize the answer (remove spaces)
+      const normalizedAnswer = userAnswer.replace(/\s/g, '');
+      
+      if (normalizedAnswer === correctAnswer || alternativeAnswers.includes(normalizedAnswer)) {
+        messageEl.textContent = "🎉 Der steinerne Wächter nickt zufrieden. Mit einem leisen Grollen öffnet sich das Tor. Ihr betretet die erste Halle der Akademie. Ein Hauch von Magie liegt in der Luft – ihr seid bereit für die nächste Prüfung!";
+        messageEl.className = "message success";
+        messageEl.style.display = "block";
+        nextBtn.style.display = "inline-block";
+        
+        // Speichere Fortschritt (optional, funktioniert nur auf Webserver)
+        try {
+          localStorage.setItem('level1_completed', 'true');
+        } catch (e) {
+          // Ignoriere localStorage-Fehler
+          console.log('localStorage nicht verfügbar');
+        }
+        
+        // Animiere das Erscheinen des nächsten Level Buttons
+        setTimeout(() => {
+          nextBtn.style.animation = "glow 1s infinite alternate";
+        }, 500);
+        
+      } else {
+        messageEl.textContent = "❌ Der Wächter bleibt regungslos. 'Das ist leider nicht korrekt. Willst du einen Tipp? Oder möchtest du es noch einmal versuchen?' Tipp: Erweitere beide Brüche so, dass sie denselben Nenner haben. Dann kannst du sie addieren.";
+        messageEl.className = "message error";
+        messageEl.style.display = "block";
+        nextBtn.style.display = "none";
+        
+        // Schüttle das Eingabefeld
+        const input = document.getElementById('answer');
+        input.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+          input.style.animation = '';
+        }, 500);
+      }
+    }
+    
+    // Shake Animation für falshe Antworten
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Enter-Taste Unterstützung
+    document.getElementById('answer').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        checkAnswer();
+      }
+    });
+    
+    // Lade Hintergrundbild mit Fallback
+    document.addEventListener('DOMContentLoaded', function() {
+      const body = document.body;
+      const img = new Image();
+      img.onload = function() {
+        body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('Level1.png')`;
+      };
+      img.onerror = function() {
+        body.style.background = 'linear-gradient(135deg, #2c1810 0%, #1a2332 50%, #2c1810 100%)';
+      };
+      img.src = 'Level1.png';
+    });
+  </script>
+</body>
+</html>
